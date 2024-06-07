@@ -19,6 +19,7 @@ package ortus.boxlang.compiler.javaboxpiler;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
@@ -103,6 +104,11 @@ public class JavaBoxpiler extends Boxpiler {
 		return instance;
 	}
 
+	@Override
+	public void printTranspiledCode( ParsingResult result, ClassInfo classInfo, PrintStream target ) {
+		target.print( generateJavaSource( result.getRoot(), classInfo ) );
+	}
+
 	/**
 	 * Generate Java source code from BoxLang AST nodes
 	 *
@@ -111,9 +117,7 @@ public class JavaBoxpiler extends Boxpiler {
 	 *
 	 * @return The generated Java source code as a string
 	 */
-	@Override
-	@SuppressWarnings( "unused" )
-	public String generateJavaSource( BoxNode node, ClassInfo classInfo ) {
+	private String generateJavaSource( BoxNode node, ClassInfo classInfo ) {
 		Transpiler transpiler = Transpiler.getTranspiler();
 		transpiler.setProperty( "classname", classInfo.className() );
 		transpiler.setProperty( "packageName", classInfo.packageName().toString() );
@@ -159,7 +163,6 @@ public class JavaBoxpiler extends Boxpiler {
 
 	@Override
 	public void compileClassInfo( String FQN ) {
-		// System.out.println( "Compiling " + FQN );
 		ClassInfo classInfo = classPool.get( FQN );
 		if ( classInfo == null ) {
 			throw new BoxRuntimeException( "ClassInfo not found for " + FQN );

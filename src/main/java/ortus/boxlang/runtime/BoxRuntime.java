@@ -1305,13 +1305,12 @@ public class BoxRuntime implements java.io.Closeable {
 	 * @param filePath The path to the source file
 	 */
 	public void printTranspiledJavaCode( String filePath ) {
-		// TODO: How to handle this with ASM?
 		ClassInfo		classInfo	= ClassInfo.forTemplate( ResolvedFilePath.of( "", "", Path.of( filePath ).getParent().toString(), filePath ),
 		    BoxSourceType.BOXSCRIPT,
 		    this.boxpiler );
 		ParsingResult	result		= boxpiler.parseOrFail( Path.of( filePath ).toFile() );
 
-		System.out.print( boxpiler.generateJavaSource( result.getRoot(), classInfo ) );
+		boxpiler.printTranspiledCode( result, classInfo, System.out );
 	}
 
 	/**
