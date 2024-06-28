@@ -1,15 +1,8 @@
 package ortus.boxlang.compiler;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ortus.boxlang.compiler.javaboxpiler.JavaBoxpiler;
 import ortus.boxlang.compiler.parser.BoxSourceType;
 import ortus.boxlang.compiler.parser.Parser;
@@ -24,6 +17,14 @@ import ortus.boxlang.runtime.types.exceptions.BoxRuntimeException;
 import ortus.boxlang.runtime.types.exceptions.ParseException;
 import ortus.boxlang.runtime.util.FRTransService;
 import ortus.boxlang.runtime.util.ResolvedFilePath;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class Boxpiler implements IBoxpiler {
 
@@ -54,15 +55,15 @@ public abstract class Boxpiler implements IBoxpiler {
 		this.classGenerationDirectory.toFile().mkdirs();
 
 		// If we are in debug mode, let's clean out the class generation directory
-		// if ( BoxRuntime.getInstance().inDebugMode() && Files.exists( this.classGenerationDirectory ) ) {
-		// try {
-		// logger.debug( "Running in debugmode, first startup cleaning out class generation directory: " + classGenerationDirectory );
-		// // if ( false )
-		// FileUtils.cleanDirectory( classGenerationDirectory.toFile() );
-		// } catch ( IOException e ) {
-		// throw new BoxRuntimeException( "Error cleaning out class generation directory on first run", e );
-		// }
-		// }
+		if ( BoxRuntime.getInstance().inDebugMode() && Files.exists( this.classGenerationDirectory ) ) {
+			try {
+				logger.debug( "Running in debugmode, first startup cleaning out class generation directory: " + classGenerationDirectory );
+				// if ( false )
+				FileUtils.cleanDirectory( classGenerationDirectory.toFile() );
+			} catch ( IOException e ) {
+				throw new BoxRuntimeException( "Error cleaning out class generation directory on first run", e );
+			}
+		}
 	}
 
 	/**
@@ -80,7 +81,7 @@ public abstract class Boxpiler implements IBoxpiler {
 	 *
 	 * @param source The source to parse.
 	 * @param type   The BoxSourceType of the source.
-	 *
+	 * 
 	 * @return The parsed AST nodes and any issues if encountered while parsing.
 	 */
 	@Override
@@ -100,7 +101,7 @@ public abstract class Boxpiler implements IBoxpiler {
 	 * Parse a file on disk into BoxLang AST nodes. This method will throw an exception if the parse fails.
 	 *
 	 * @param file The file to parse
-	 *
+	 * 
 	 * @return The parsed AST nodes and any issues if encountered while parsing.
 	 */
 	@Override
@@ -112,7 +113,7 @@ public abstract class Boxpiler implements IBoxpiler {
 	 * Parse a file on disk into BoxLang AST nodes. This method will NOT throw an exception if the parse fails.
 	 *
 	 * @param file The file to parse
-	 *
+	 * 
 	 * @return The parsed AST nodes and any issues if encountered while parsing.
 	 */
 	@Override
@@ -131,7 +132,7 @@ public abstract class Boxpiler implements IBoxpiler {
 	 *
 	 * @param source The source to parse.
 	 * @param type   The BoxSourceType of the source.
-	 *
+	 * 
 	 * @return The parsed AST nodes and any issues if encountered while parsing.
 	 */
 	@Override
@@ -143,7 +144,7 @@ public abstract class Boxpiler implements IBoxpiler {
 	 * Validate a parsing result and throw an exception if the parse failed.
 	 *
 	 * @param result The parsing result to validate
-	 *
+	 * 
 	 * @return The parsing result if the parse was successful
 	 */
 	@Override
@@ -159,7 +160,7 @@ public abstract class Boxpiler implements IBoxpiler {
 	 *
 	 * @param source The BoxLang source code as a string
 	 * @param type   The type of BoxLang source code
-	 *
+	 * 
 	 * @return The loaded class
 	 */
 	@Override
@@ -177,7 +178,7 @@ public abstract class Boxpiler implements IBoxpiler {
 	 *
 	 * @param source The BoxLang source code as a string
 	 * @param type   The type of BoxLang source code
-	 *
+	 * 
 	 * @return The loaded class
 	 */
 	@Override
@@ -193,7 +194,7 @@ public abstract class Boxpiler implements IBoxpiler {
 	 * Compile a BoxLang template (file on disk) into a Java class
 	 *
 	 * @param resolvedFilePath The BoxLang source code as a Path on disk
-	 *
+	 * 
 	 * @return The loaded class
 	 */
 	@Override
@@ -220,7 +221,7 @@ public abstract class Boxpiler implements IBoxpiler {
 	 * Compile a BoxLang Class from source into a Java class
 	 *
 	 * @param source The BoxLang source code as a string
-	 *
+	 * 
 	 * @return The loaded class
 	 */
 	@Override
@@ -236,7 +237,7 @@ public abstract class Boxpiler implements IBoxpiler {
 	 * Compile a BoxLang Class from a file into a Java class
 	 *
 	 * @param resolvedFilePath The BoxLang source code as a Path on disk
-	 *
+	 * 
 	 * @return The loaded class
 	 */
 	@Override
